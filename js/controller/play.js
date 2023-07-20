@@ -814,6 +814,27 @@ angular.module('listenone').controller('PlayController', [
       });
     });
 
+    $scope.saveMp3 = (mp3Url, fileName, platform) => {
+      if (mp3Url === undefined) return 
+
+      const xhr = new XMLHttpRequest()
+      xhr.open("GET", mp3Url, true)
+      xhr.responseType = 'blob'
+      
+      xhr.onload = function () {
+        const url = URL.createObjectURL(xhr.response)
+        console.log("🐸  ==>> file: play.js:826 ==>> xhr.response:", xhr.response)
+        const a = document.createElement('a')
+        a.href = url
+        a.target = '_blank'
+        a.download = `${fileName}_${platform}.mp3`
+        a.click()
+        URL.revokeObjectURL(a.href)
+        a.remove()
+      }
+      xhr.send()
+    }
+
     $scope.toggleLyricTranslation = () => {
       $scope.enableLyricTranslation = !$scope.enableLyricTranslation;
       localStorage.setObject(
